@@ -9,11 +9,11 @@ import pandas as pd
 
 # This is the title to the code 
 st.title('Combine Files')
-
+st.write('This APP allows a user to Merge the Totara Module data with the WEP data, so that you have a combined view.')
 # Uploads the file
 #test
 
-uploaded_file1 = st.file_uploader("Choose a file", key="1")
+uploaded_file1 = st.file_uploader("Upload Totara Module data", key="1")
 if uploaded_file1 is not None:
     # To read file as bytes:
     # bytes_data = uploaded_file1.getvalue()
@@ -22,7 +22,7 @@ if uploaded_file1 is not None:
     df1 = pd.read_excel(uploaded_file1)
     st.write(df1.head(3))
 
-uploaded_file2 = st.file_uploader("Choose a file", key='2')
+uploaded_file2 = st.file_uploader("Upload WEP data", key='2')
 if uploaded_file2 is not None:
     # To read file as bytes:
     # bytes_data = uploaded_file1.getvalue()
@@ -55,8 +55,8 @@ if st.button('Start Merge'):
     st.download_button(label='📥 Download Current Result',
                                 data=df_xlsx ,
                                 file_name= 'MergedReport.xlsx')
-                                
-    # merged_df.to_excel('/Users/timothytraviss/Desktop/MergeReports/NewReport.xlsx')
+
+    # merged_df.to_excel('NewReport.xlsx')
     # print(merged_df)
 
     # with open(file_name, "rb") as template_file:
