@@ -8,51 +8,37 @@ from io import StringIO
 # This is the title to the code 
 st.title('Combine Files')
 
-#Uploads the file
-import streamlit as st
+# Uploads the file
 
 
-uploaded_files = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
-for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read()
-    st.write("filename:", uploaded_file.name)
-    st.write(bytes_data)
+uploaded_file1 = st.file_uploader("Choose a file", key="1")
+if uploaded_file1 is not None:
+    # To read file as bytes:
+    # bytes_data = uploaded_file1.getvalue()
+    # st.write(bytes_data)
 
-# uploaded_file = st.file_uploader("Choose a file")
-# if uploaded_file is not None:
-#     # To read file as bytes:
-#     bytes_data = uploaded_file.getvalue()
-#     st.write(bytes_data)
+    df1 = pd.read_excel(uploaded_file1)
+    st.write(df1.head(3))
 
-#     # To convert to a string based IO:
-#     stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-#     st.write(stringio)
+uploaded_file2 = st.file_uploader("Choose a file", key='2')
+if uploaded_file2 is not None:
+    # To read file as bytes:
+    # bytes_data = uploaded_file1.getvalue()
+    # st.write(bytes_data)
 
-#     # To read file as string:
-#     string_data = stringio.read()
-#     st.write(string_data)
+    df2 = pd.read_excel(uploaded_file2)
+    st.write(df1.head(3))
+    
+    # Convert the column to uppercase
+    df1['QID'] = df1['QID'].str.upper()
+    df2['QID'] = df2['QID'].str.upper()
 
-#     # Can be used wherever a "file-like" object is accepted:
-#     dataframe = pd.read_csv(uploaded_file)
-#     st.write(dataframe)
+    print(df1, df2)
 
-#     folder = r'/Users/timothytraviss/Desktop/WEP_Excel_Files/'
-#     df_total = pd.DataFrame()
+    # Merge the dataframes based on the common column
+    merged_df = pd.merge(df1, df2, on='QID')
 
-#     files = os.listdir(folder)
-#     files
-#     for file in files: #loop through excel files
-#         if file.endswith('.xlsx'):
-#             excel_file = pd.ExcelFile(f'{folder}/{file}')
-#             sheets = excel_file.sheet_names
-#             for shhet in sheets: #loop through the sheets
-#                 df = excel_file.parse()
-#                 df_total = df_total.append(df)
-    #This prints out a message in the console to sya that it worked. 
+    merged_df.to_excel('/Users/timothytraviss/Desktop/LearningToCode/MergeReports/NewReport.xlsx')
+    print(merged_df)
 
-    # OLD CODE 
-    # df_total.to_excel(f'{folder}/combinedfile.xlsx')
-    # print('\n')
-    # print('This has worked and your file is now ready')
-    # st.success('This has worked and your file is now ready')
-    # print('\n')
+    print('ALL DONE!')
