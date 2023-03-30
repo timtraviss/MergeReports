@@ -1,7 +1,9 @@
 import streamlit as st
-import os
+from io import BytesIO
+from pyxlsb import open_workbook as open_xlsb
+#import os
 import pandas as pd
-from io import StringIO
+#from io import StringIO
 # import warnings
 # warnings.simplefilter("ignore")
 
@@ -29,16 +31,40 @@ if uploaded_file2 is not None:
     df2 = pd.read_excel(uploaded_file2)
     st.write(df1.head(3))
     
+if st.button('Start Merge'):
+    st.success('Merge Started')
     # Convert the column to uppercase
     df1['QID'] = df1['QID'].str.upper()
     df2['QID'] = df2['QID'].str.upper()
 
-    print(df1, df2)
-
     # Merge the dataframes based on the common column
     merged_df = pd.merge(df1, df2, on='QID')
 
-    merged_df.to_excel('/Users/timothytraviss/Desktop/MergeReports/NewReport.xlsx')
-    print(merged_df)
+    def to_excel(merged_df):
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        merged_df.to_excel(writer, index=False, sheet_name='Report')
+        workbook = writer.book
+        worksheet = writer.sheets['Report']
+        # format1 = workbook.add_format({'num_format': '0.00'}) 
+        # worksheet.set_column('A:A', None, format1)  
+        writer.save()
+        processed_data = output.getvalue()
+        return processed_data
+    df_xlsx = to_excel(merged_df)
+    st.download_button(label='📥 Download Current Result',
+                                data=df_xlsx ,
+                                file_name= 'MergedReport.xlsx')
+                                
+    # merged_df.to_excel('/Users/timothytraviss/Desktop/MergeReports/NewReport.xlsx')
+    # print(merged_df)
+
+    # with open(file_name, "rb") as template_file:
+    #     template_byte = template_file.read()
+
+    # st.download_button(label="Click to Download Template File",
+    #                     data=template_byte,
+    #                     file_name="template.xlsx",
+    #                     mime='application/octet-stream')
     st.success('All Merged')
     print('ALL DONE!')
