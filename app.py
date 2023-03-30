@@ -38,7 +38,7 @@ if uploaded_file2 is not None:
     # Merge the dataframes based on the common column
     merged_df = pd.merge(df1, df2, on='QID')
 
-    merged_df.to_excel('/Users/timothytraviss/Desktop/LearningToCode/MergeReports/NewReport.xlsx')
+    merged_df.to_excel('/Users/timothytraviss/Desktop/MergeReports/NewReport.xlsx')
     print(merged_df)
-
+    st.success('All Merged')
     print('ALL DONE!')
