@@ -1,9 +1,10 @@
 import streamlit as st
 from io import BytesIO
-from pyxlsb import open_workbook as open_xlsb
-import xlsxwriter
+# from pyxlsb import open_workbook as open_xlsb
+# import xlsxwriter
 import pandas as pd
 import openpyxl
+import datetime
 
 import warnings
 warnings.simplefilter("ignore")
@@ -30,25 +31,40 @@ if uploaded_file2 is not None:
     # st.write(bytes_data)
 
     df2 = pd.read_excel(uploaded_file2)
-    st.write(df1.head(3))
+    st.write(df2.head(3))
     
 if st.button('Start Merge', key='3'):
     st.success('Merge Started')
     
     # Convert the column to uppercase
     df1['QID'] = df1['QID'].str.upper() # Totara data 
-    
+    st.write('QID transformed to uppercase')
+    st.write(df1.head(2))
+    # Add a new column to df2 and fill it with an Excel formula
+    df2['Months in DDP'] = df2[2].apply(lambda x: '=DATEDIF("' + str(x) + '", TODAY(), "M")')
 
-    # Insert formula into WEP data df2 
-    # https://www.geeksforgeeks.org/adding-new-column-to-existing-dataframe-in-pandas/
-    df2.insert(3, "QID", [f'=MID(A2,FIND("(",A2)+1,FIND(")",A2)-FIND("(",A2)-1)'], True) #do I need to filldown?
-    df2['QID'] = df2['QID'].str.upper() # WEP data 
-    # del df['column_name']
+    # Convert the Excel formula strings to actual formulas
+    df2['Months in DDP'] = df2['Months in DDP'].apply(lambda x: None if x is None else x[1:] if x.startswith('=') else x)
+    df2['Months in DDP'] = pd.to_numeric(df2['Months in DDP'], errors='coerce')
+
+    # Convert the column to uppercase
+    df2['QID'] = df2['QID'].str.upper() 
+
+    # Merge the dataframes based on the common column
+    merged_df = pd.merge(df1, df2, on='QID')
+
+    # # https://www.geeksforgeeks.org/adding-new-column-to-existing-dataframe-in-pandas/
+    # df2.insert(3, "QID") #do I need to filldown?
+    # st.write('QID column inserted')
+    # df2.insert([f'=MID(A2,FIND("(",A2)+1,FIND(")",A2)-FIND("(",A2)-1)'], True, value=None)
+    # # df2.insert(1) #do I need to filldown?
+    # df2['QID'] = df2['QID'].str.upper() # WEP data 
+    # # del df['column_name']
     del df2[1,3]
 
     # Merge the dataframes based on the common column
     merged_df = pd.merge(df1, df2, on='QID')
-    merged_df.insert(11, 'Months in DDP', [f'=sum(today()-k2/30.41)']) # do I need to filldown?
+    # merged_df.insert(11, 'Months in DDP', [f'=sum(today()-k2/30.41)']) # do I need to filldown?
 
     def writer():
         writer = pd.ExcelWriter('MergedReport.xlsx', engine='xlsxwriter')

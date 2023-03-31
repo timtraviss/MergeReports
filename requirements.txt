@@ -1,7 +1,7 @@
 streamlit==1.20.0 
 pandas==1.5.3
 openpyxl=<1.0
-pyxlsb
+pyxlsb==1.0.10
 BytesIO
-xlsxwriter
+xlsxwriter==3.0.3
 openpyxl
