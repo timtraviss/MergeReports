@@ -38,37 +38,29 @@ if st.button('Start Merge', key='3'):
     
     # Convert the column to uppercase
     df1['QID'] = df1['QID'].str.upper() # Totara data 
-    st.write('QID transformed to uppercase')
+    st.write('DF1 - QID transformed to uppercase')
     st.write(df1.head(2))
     # Add a new column to df2 and fill it with an Excel formula
-    df2['Months in DDP'] = df2[2].apply(lambda x: '=DATEDIF("' + str(x) + '", TODAY(), "M")')
+    df2.insert(loc=2, column='QID', value=None)
+    st.write('DF2 - Column inserted')
+    df2['QID'] = df2['Trainee'].str.extract(r'\((.*?)\)')
+    # df2['QID'].apply(lambda x: '=DATEDIF("' + str(x) + '", TODAY(), "M")')
+    # del df2['Trainee', 'Supervisors']
+    st.write(df2.head(2))
+    # df2['Months in DDP'] = df2[2].apply(lambda x: '=DATEDIF("' + str(x) + '", TODAY(), "M")')
+    # # Convert the Excel formula strings to actual formulas
+    # df2['Months in DDP'] = df2['Months in DDP'].apply(lambda x: None if x is None else x[1:] if x.startswith('=') else x)
+    # df2['Months in DDP'] = pd.to_numeric(df2['Months in DDP'], errors='coerce')
 
-    # Convert the Excel formula strings to actual formulas
-    df2['Months in DDP'] = df2['Months in DDP'].apply(lambda x: None if x is None else x[1:] if x.startswith('=') else x)
-    df2['Months in DDP'] = pd.to_numeric(df2['Months in DDP'], errors='coerce')
-
-    # Convert the column to uppercase
-    df2['QID'] = df2['QID'].str.upper() 
-
-    # Merge the dataframes based on the common column
-    merged_df = pd.merge(df1, df2, on='QID')
-
-    # # https://www.geeksforgeeks.org/adding-new-column-to-existing-dataframe-in-pandas/
-    # df2.insert(3, "QID") #do I need to filldown?
-    # st.write('QID column inserted')
-    # df2.insert([f'=MID(A2,FIND("(",A2)+1,FIND(")",A2)-FIND("(",A2)-1)'], True, value=None)
-    # # df2.insert(1) #do I need to filldown?
-    # df2['QID'] = df2['QID'].str.upper() # WEP data 
-    # # del df['column_name']
-    del df2[1,3]
+    # # Convert the column to uppercase
+    # df2['QID'] = df2['QID'].str.upper() 
 
     # Merge the dataframes based on the common column
     merged_df = pd.merge(df1, df2, on='QID')
-    # merged_df.insert(11, 'Months in DDP', [f'=sum(today()-k2/30.41)']) # do I need to filldown?
-
-    def writer():
-        writer = pd.ExcelWriter('MergedReport.xlsx', engine='xlsxwriter')
-        merged_df.to_excel(writer, sheet_name='Report')
+    st.write(merged_df.head(5))
+    # def writer():
+    #     writer = pd.ExcelWriter('MergedReport.xlsx', engine='xlsxwriter')
+    #     merged_df.to_excel(writer, sheet_name='Report')
 
     # def to_excel(merged_df):
     #     output = BytesIO()
@@ -82,10 +74,10 @@ if st.button('Start Merge', key='3'):
     #     processed_data = output.getvalue()
     #     return processed_data
     # df_xlsx = to_excel(merged_df)
-    st.download_button(label='📥 Download Current Result',
-                                data=writer,
-                                file_name= 'MergedReport.xlsx',
-                                key='4')
+    # st.download_button(label='📥 Download Current Result',
+    #                             data=writer,
+    #                             file_name= 'MergedReport.xlsx',
+    #                             key='4')
 
     # merged_df.to_excel('NewReport.xlsx')
     # print(merged_df)
