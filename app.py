@@ -50,8 +50,23 @@ if st.button('Start Merge', key='3'):
     del df2['Supervisors']
     # Merge the dataframes based on the common column.
     merged_df = pd.merge(df1, df2, on='QID')
-    # Delete the columns that are not required. 
+   
+    # Change the date time format in these columns
+    merged_df['Date Completed'] = pd.to_datetime(merged_df['Date Completed'])
+    merged_df['Date Completed'] = merged_df['Date Completed'].dt.strftime('%d %b %Y')
+
+    merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
+    merged_df['DDC Completion Date'] = merged_df['DDC Completion Date'].dt.strftime('%d %b %Y')
+
+    merged_df['WEP Start Date'] = pd.to_datetime(merged_df['WEP Start Date'])
+    merged_df['WEP Start Date'] = merged_df['WEP Start Date'].dt.strftime('%d %b %Y')
+
+    merged_df['DQC Completion Date'] = pd.to_datetime(merged_df['DQC Completion Date'])
+    merged_df['DQC Completion Date'] = merged_df['DQC Completion Date'].dt.strftime('%d %b %Y')
+    
+    # Delete the columns that are not required.
     del merged_df['Job Location']
+    del merged_df['Program Short Name']
     del merged_df['Programme Suspended']
     del merged_df['Date Suspended']
     del merged_df['Leave Type']
@@ -91,15 +106,29 @@ if st.button('Start Merge', key='3'):
     st.write('Merged_df')
     st.write(merged_df.head(5))
 
-    writer = pd.ExcelWriter('MergedReport.xlsx', engine='xlsxwriter')
-    writer.save(filename='MergedReport.xlsx')
-    # writer.save()
-    merged_df.to_excel(writer, sheet_name='Report')
-    st.success('All Merged')
-    st.download_button(label='📥 Download Current Result',
-                            data=BytesIO(writer.getvalue()),
-                            file_name= 'MergedReport.xlsx',
-                            key='4')    
+    @st.cache_data
+    def convert_df(merged_df):
+        # IMPORTANT: Cache the conversion to prevent computation on every rerun
+        return merged_df.to_csv().encode('utf-8')
+
+    csv = convert_df(merged_df)
+
+    st.download_button(
+    label="Download data as CSV",
+    data=csv,
+    file_name='MergedReport.csv',
+    mime='text/csv',
+)
+
+    # writer = pd.ExcelWriter('MergedReport.xlsx', engine='xlsxwriter')
+    # writer.save(filename='MergedReport.xlsx')
+    # # writer.save()
+    # merged_df.to_excel(writer, sheet_name='Report')
+    # st.success('All Merged')
+    # st.download_button(label='📥 Download Current Result',
+    #                         data=BytesIO(writer.getvalue()),
+    #                         file_name= 'MergedReport.xlsx',
+    #                         key='4')    
     print('ALL DONE!')
 
     # st.download_button(label='📥 Download Current Result',
