@@ -36,20 +36,21 @@ if uploaded_file2 is not None:
 if st.button('Start Merge', key='3'):
     st.success('Merge Started')
     
-    # Convert the column to uppercase
-    df1['QID'] = df1['QID'].str.upper() # Totara data 
+    # Convert the column to uppercase, df1 equals the totara data. 
+    df1['QID'] = df1['QID'].str.upper() 
+    df1.rename(columns= {'Progress (%)':'Modules (%)'}, inplace=True)
     st.write('DF1 - QID transformed to uppercase')
 
     st.write(df1.head(2))
-    # Add a new column to df2 and fill it with an Excel formula
+    # Add a new column to df2 and fill it with an Excel formula.
     df2.insert(loc=2, column='QID', value=None)
     # Extract the QID from the Trainee Column. 
     df2['QID'] = df2['Trainee'].str.extract(r'\((.*?)\)')
     del df2['District']
     del df2['Supervisors']
-    # Merge the dataframes based on the common column
+    # Merge the dataframes based on the common column.
     merged_df = pd.merge(df1, df2, on='QID')
-    # Delete the column called 'Job Location'
+    # Delete the columns that are not required. 
     del merged_df['Job Location']
     del merged_df['Programme Suspended']
     del merged_df['Date Suspended']
@@ -61,22 +62,51 @@ if st.button('Start Merge', key='3'):
     del merged_df['WEP Completed By']
     del merged_df['WEP Completed Date']
     del merged_df['WEP Moderation Details']
-    # Delete the Column called 'District_y'
+    ## Columns required in Merged Report 
+    # QID
+    # Fullname
+    # District 
+    # Program Status 
+    # Due Date
+    # Modules (%)
+    # Date Completed 
+    # Course Name
+    # Course Status 
+    # Final Grade
+    # DDC Completion Date 
+    # Months in DDP
+    # DDC Completion Date 
+    # Months in DDP
+    # DQC Completion Date 
+    # WEP Start Date 
+    # WEP (%)
+    # WEP Status
+    # WEP Completed Date
+
  
     # Rename the columns 
-    merged_df.rename(columns= {'District_x':'District', 'WEP Completion Percentage':'WEP (%)'})
+    merged_df.rename(columns= {'WEP Completion Percentage':'WEP (%)'}, inplace=True)
     ## Print Statements
     print('renamed')
     st.write('Merged_df')
     st.write(merged_df.head(5))
 
-   
     writer = pd.ExcelWriter('MergedReport.xlsx', engine='xlsxwriter')
+    writer.save(filename='MergedReport.xlsx')
+    # writer.save()
     merged_df.to_excel(writer, sheet_name='Report')
     st.success('All Merged')
     st.download_button(label='📥 Download Current Result',
-                                data=writer,
-                                file_name= 'MergedReport.xlsx',
-                                key='4')    
-    
+                            data=BytesIO(writer.getvalue()),
+                            file_name= 'MergedReport.xlsx',
+                            key='4')    
     print('ALL DONE!')
+
+    # st.download_button(label='📥 Download Current Result',
+    #                data=writer,
+    #                file_name='MergedReport.xlsx',
+    #                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    #                on_click=':download')
+
+    
+    # print('ALL DONE!')
