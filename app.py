@@ -9,6 +9,13 @@ import datetime
 import warnings
 warnings.simplefilter("ignore")
 
+
+st.set_page_config(layout="wide", 
+                   page_icon=":clipboard:", 
+                   page_title="Merge Reports"
+                   )
+
+
 # This is the title to the code 
 st.title('Combine Files')
 st.write('This APP allows a user to Merge the Totara Module data with the WEP data, so that you have a combined view.')
