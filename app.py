@@ -1,7 +1,5 @@
 import streamlit as st
 from io import BytesIO
-# from pyxlsb import open_workbook as open_xlsb
-# import xlsxwriter
 import pandas as pd
 import openpyxl
 import datetime
@@ -23,23 +21,17 @@ st.write('This APP allows a user to Merge the Totara Module data with the WEP da
 # Uploads the file containing the TOTARA Data 
 uploaded_file1 = st.file_uploader("Upload Totara Module data", key="1")
 if uploaded_file1 is not None:
-    # To read file as bytes:
-    # bytes_data = uploaded_file1.getvalue()
-    # st.write(bytes_data)
-
+  
     df1 = pd.read_excel(uploaded_file1)
-    st.subheader('DF1')
+    st.subheader('DF1 - Module Data')
     st.write(df1.head(3))
 
 # Uploads the file containing the WEP data 
 uploaded_file2 = st.file_uploader("Upload WEP data", key='2')
 if uploaded_file2 is not None:
-    # To read file as bytes:
-    # bytes_data = uploaded_file1.getvalue()
-    # st.write(bytes_data)
-
+ 
     df2 = pd.read_excel(uploaded_file2)
-    st.subheader('DF2')
+    st.subheader('DF2 - WEP Data')
     st.write(df2.head(3))
     
 if st.button('Start Merge', key='3'):
@@ -48,15 +40,15 @@ if st.button('Start Merge', key='3'):
     # Convert the column to uppercase, df1 equals the totara data. 
     df1['QID'] = df1['QID'].str.upper() 
     df1.rename(columns= {'Progress (%)':'Modules (%)'}, inplace=True)
-    # st.write('DF1 - QID transformed to uppercase')
-    st.subheader('DF1')
-    st.write(df1.head(2))
+
     # Add a new column to df2 and fill it with an Excel formula.
     df2.insert(loc=2, column='QID', value=None)
+
     # Extract the QID from the Trainee Column. 
     df2['QID'] = df2['Trainee'].str.extract(r'\((.*?)\)')
     del df2['District']
     del df2['Supervisors']
+
     # Merge the dataframes based on the common column.
     merged_df = pd.merge(df1, df2, on='QID')
    
@@ -107,28 +99,29 @@ if st.button('Start Merge', key='3'):
     # WEP Status
     # WEP Completed Date
 
- 
-    # Rename the columns 
+    # Rename the columns. 
     merged_df.rename(columns= {'WEP Completion Percentage':'WEP (%)'}, inplace=True)
     ## Print Statements
     print('renamed')
-    # st.write('Merged_df')
-    st.subheader('Merged DF')
+    # This code will appear on the page. 
+    st.subheader('Merged DF - Merged Report')
     st.write(merged_df.head(5))
 
     @st.cache_data
+    #Function to merge and encode data from dataframe to csv file. 
     def convert_df(merged_df):
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
         return merged_df.to_csv().encode('utf-8')
 
     csv = convert_df(merged_df)
-
+    st.success('Download Ready')
+    # Download Button. 
     st.download_button(
         label="Download data as CSV",
         data=csv,
         file_name='MergedReport.csv',
         mime='text/csv',
         )
-    st.success('Download Started....')
+    
 
     
