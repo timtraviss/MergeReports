@@ -28,6 +28,7 @@ if uploaded_file1 is not None:
     # st.write(bytes_data)
 
     df1 = pd.read_excel(uploaded_file1)
+    st.subheader('DF1')
     st.write(df1.head(3))
 
 # Uploads the file containing the WEP data 
@@ -38,6 +39,7 @@ if uploaded_file2 is not None:
     # st.write(bytes_data)
 
     df2 = pd.read_excel(uploaded_file2)
+    st.subheader('DF2')
     st.write(df2.head(3))
     
 if st.button('Start Merge', key='3'):
@@ -47,7 +49,7 @@ if st.button('Start Merge', key='3'):
     df1['QID'] = df1['QID'].str.upper() 
     df1.rename(columns= {'Progress (%)':'Modules (%)'}, inplace=True)
     # st.write('DF1 - QID transformed to uppercase')
-
+    st.subheader('DF1')
     st.write(df1.head(2))
     # Add a new column to df2 and fill it with an Excel formula.
     df2.insert(loc=2, column='QID', value=None)
@@ -111,6 +113,7 @@ if st.button('Start Merge', key='3'):
     ## Print Statements
     print('renamed')
     # st.write('Merged_df')
+    st.subheader('Merged DF')
     st.write(merged_df.head(5))
 
     @st.cache_data
@@ -126,6 +129,6 @@ if st.button('Start Merge', key='3'):
         file_name='MergedReport.csv',
         mime='text/csv',
         )
-    st.success('Downlaod Ready')
+    st.success('Download Started....')
 
     
