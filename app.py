@@ -46,7 +46,7 @@ if st.button('Start Merge', key='3'):
     # Convert the column to uppercase, df1 equals the totara data. 
     df1['QID'] = df1['QID'].str.upper() 
     df1.rename(columns= {'Progress (%)':'Modules (%)'}, inplace=True)
-    st.write('DF1 - QID transformed to uppercase')
+    # st.write('DF1 - QID transformed to uppercase')
 
     st.write(df1.head(2))
     # Add a new column to df2 and fill it with an Excel formula.
@@ -110,7 +110,7 @@ if st.button('Start Merge', key='3'):
     merged_df.rename(columns= {'WEP Completion Percentage':'WEP (%)'}, inplace=True)
     ## Print Statements
     print('renamed')
-    st.write('Merged_df')
+    # st.write('Merged_df')
     st.write(merged_df.head(5))
 
     @st.cache_data
@@ -121,28 +121,11 @@ if st.button('Start Merge', key='3'):
     csv = convert_df(merged_df)
 
     st.download_button(
-    label="Download data as CSV",
-    data=csv,
-    file_name='MergedReport.csv',
-    mime='text/csv',
-)
-
-    # writer = pd.ExcelWriter('MergedReport.xlsx', engine='xlsxwriter')
-    # writer.save(filename='MergedReport.xlsx')
-    # # writer.save()
-    # merged_df.to_excel(writer, sheet_name='Report')
-    # st.success('All Merged')
-    # st.download_button(label='📥 Download Current Result',
-    #                         data=BytesIO(writer.getvalue()),
-    #                         file_name= 'MergedReport.xlsx',
-    #                         key='4')    
-    print('ALL DONE!')
-
-    # st.download_button(label='📥 Download Current Result',
-    #                data=writer,
-    #                file_name='MergedReport.xlsx',
-    #                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    #                on_click=':download')
+        label="Download data as CSV",
+        data=csv,
+        file_name='MergedReport.csv',
+        mime='text/csv',
+        )
+    st.success('Downlaod Ready')
 
     
-    # print('ALL DONE!')
