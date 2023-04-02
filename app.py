@@ -21,7 +21,7 @@ st.write('This APP allows a user to Merge the Totara Module data with the WEP da
 uploaded_file1 = st.file_uploader("Upload Totara Module data", key="1")
 if uploaded_file1 is not None:
   
-    df1 = pd.read_csv(upload_file1)
+    df1 = pd.read_csv(uploaded_file1)
     # df1 = pd.read_excel(uploaded_file1)
     st.subheader('DF1 - Module Data')
     st.write(df1.head(3))
