@@ -18,7 +18,7 @@ st.title('Combine Files')
 st.write('This APP allows a user to Merge the Totara Module data with the WEP data, so that you have a combined view.')
 
 # Uploads the file containing the TOTARA Data 
-uploaded_file1 = st.file_uploader("Upload Totara Module data", key="1")
+uploaded_file1 = st.file_uploader("Upload Totara Module data csv file", key="1")
 if uploaded_file1 is not None:
   
     df1 = pd.read_csv(uploaded_file1)
@@ -27,7 +27,7 @@ if uploaded_file1 is not None:
     st.write(df1.head(3))
 
 # Uploads the file containing the WEP data 
-uploaded_file2 = st.file_uploader("Upload WEP data", key='2')
+uploaded_file2 = st.file_uploader("Upload WEP data xlsx file", key='2')
 if uploaded_file2 is not None:
  
     df2 = pd.read_excel(uploaded_file2)
@@ -69,8 +69,14 @@ if st.button('Start Merge', key='3'):
     merged_df['WEP Start Date'] = pd.to_datetime(merged_df['WEP Start Date'])
     merged_df['WEP Start Date'] = merged_df['WEP Start Date'].dt.strftime('%d %b %Y')
 
+    # merged_df['Months in DDP'] = merged_df['DDC Completion Date'].apply(lambda x: x + pd.DateOffset(months=30))
+
     merged_df['DQC Completion Date'] = pd.to_datetime(merged_df['DQC Completion Date'])
     merged_df['DQC Completion Date'] = merged_df['DQC Completion Date'].dt.strftime('%d %b %Y')
+   
+    # Filters out the dates. 
+    # filtered_df = merged_df[merged_df['DQC Completion Date'].isna()]
+    # merged_df['DQC Completion Date'] = filtered_df
     
     # Delete the columns that are not required.
     del merged_df['Job Location']
