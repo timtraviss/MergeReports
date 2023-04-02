@@ -22,7 +22,8 @@ st.write('This APP allows a user to Merge the Totara Module data with the WEP da
 uploaded_file1 = st.file_uploader("Upload Totara Module data", key="1")
 if uploaded_file1 is not None:
   
-    df1 = pd.read_excel(uploaded_file1)
+    df1 = pd.read_csv(upload_file1)
+    # df1 = pd.read_excel(uploaded_file1)
     st.subheader('DF1 - Module Data')
     st.write(df1.head(3))
 
@@ -37,9 +38,16 @@ if uploaded_file2 is not None:
 if st.button('Start Merge', key='3'):
     st.success('Merge Started')
     
-    # Convert the column to uppercase, df1 equals the totara data. 
+    # df1 equals the totara data. 
+    # Renames the Column User name to QID.
+    df1.rename(columns= {'Username':'QID'}, inplace=True)
+    # Turns the QID Column to uppercase.
     df1['QID'] = df1['QID'].str.upper() 
+    # Renames the Column.
     df1.rename(columns= {'Progress (%)':'Modules (%)'}, inplace=True)
+    # Renames the Column.
+    df1.rename(columns= {'Due Date':'Months in DDP'}, inplace=True)
+
 
     # Add a new column to df2 and fill it with an Excel formula.
     df2.insert(loc=2, column='QID', value=None)
