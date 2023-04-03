@@ -3,6 +3,7 @@ from io import BytesIO
 import pandas as pd
 import openpyxl
 import datetime
+from datetime import date
 
 import warnings
 warnings.simplefilter("ignore")
@@ -63,17 +64,22 @@ if st.button('Start Merge', key='3'):
     merged_df['Date Completed'] = pd.to_datetime(merged_df['Date Completed'])
     merged_df['Date Completed'] = merged_df['Date Completed'].dt.strftime('%d %b %Y')
 
-    merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
-    merged_df['DDC Completion Date'] = merged_df['DDC Completion Date'].dt.strftime('%d %b %Y')
-
     merged_df['WEP Start Date'] = pd.to_datetime(merged_df['WEP Start Date'])
     merged_df['WEP Start Date'] = merged_df['WEP Start Date'].dt.strftime('%d %b %Y')
+    
+    today = date.today()
+    print(today)
+    # merged_df['Months in DDP'] = (datetime.date.today().year - merged_df['DQC Completion Date']) 
 
-    # merged_df['Months in DDP'] = merged_df['DDC Completion Date'].apply(lambda x: x + pd.DateOffset(months=30))
-
+    # merged_df['Months in DDP'] = (today - merged_df['DDC Completion Date'].dt.date) // pd.Timedelta(days=30)
+    # merged_df['Months in DDP'] = (today - merged_df['DDC Completion Date']) // pd.Timedelta(days=30)
+   
     merged_df['DQC Completion Date'] = pd.to_datetime(merged_df['DQC Completion Date'])
     merged_df['DQC Completion Date'] = merged_df['DQC Completion Date'].dt.strftime('%d %b %Y')
    
+    merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
+    merged_df['DDC Completion Date'] = merged_df['DDC Completion Date'].dt.strftime('%d %b %Y')
+
     # Filters out the dates. 
     # filtered_df = merged_df[merged_df['DQC Completion Date'].isna()]
     # merged_df['DQC Completion Date'] = filtered_df
@@ -136,5 +142,7 @@ if st.button('Start Merge', key='3'):
         mime='text/csv',
         )
     
+    st.markdown('- Save file as Excel')
+    st.markdown('- Add formula in the Months in DDP field **[=SUM(today()-K2/30.41)]**')
 
     
