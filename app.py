@@ -4,6 +4,8 @@ import pandas as pd
 import openpyxl
 import datetime
 from datetime import date
+import numpy as np
+from dateutil.relativedelta import relativedelta
 
 
 import warnings
@@ -62,30 +64,25 @@ if st.button('Start Merge', key='3'):
     merged_df = pd.merge(df1, df2, on='QID')
    
     ### --- NEW CODE 
-
     # Creates todays date.
     today = datetime.date.today()
+
     # Prints todays date.
     print(today)
+
     # Turns the datetime into a datetime array.
     merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
     merged_df['Months in DDP'] = pd.to_datetime(merged_df['Months in DDP'])
     today = pd.to_datetime(today)
 
-    #Create the difference between the two dates. 
+    # Create the difference between the two dates.
     date_delta = today - merged_df['DDC Completion Date']
+    
+    ### --- NEED TO FIGURE OUT HOW TO CONVERT A TIMEDELTA TO A FLOAT
 
-    # Turns the dates into an interger. 
-    numberOfDays = date_delta
+    print(merged_df['Months in DDP'])
+    print(date_delta)
    
-    #Prints the number of days. 
-    DDP_Months = (numberOfDays/30.41)
-    print(DDP_Months)
-    # merged_df['Months in DDP'] = DDP_Months
-
-    ### --- I now get an error where I can't separate the timedate from the timedate array. 
-    ### --- unsupported operand type(s) for -: 'DatetimeArray' and 'datetime.date'
-
     # Change the date time format in these columns
     merged_df['Date Completed'] = pd.to_datetime(merged_df['Date Completed'])
     merged_df['Date Completed'] = merged_df['Date Completed'].dt.strftime('%d %b %Y')
@@ -157,6 +154,7 @@ if st.button('Start Merge', key='3'):
         mime='text/csv',
         )
     
+    st.write('TO DO')
     st.markdown('- Save file as Excel')
     st.markdown('- Add formula in the Months in DDP field **[=SUM(today()-K2/30.41)]**')
 
