@@ -60,6 +60,27 @@ if st.button('Start Merge', key='3'):
     # Merge the dataframes based on the common column.
     merged_df = pd.merge(df1, df2, on='QID')
    
+    ### --- NEW CODE 
+
+    # Creates todays date.
+    today = datetime.date.today()
+    # Prints todays date.
+    print(today)
+    # Turns the datetime into a datetime array.
+    merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
+
+    #Create the difference between the two dates. 
+    date_delta = today - merged_df['DDC Completion Date']
+
+    # Turns the dates into an interger. 
+    numberOfDays = date_delta.days
+
+    #Prints the number of days. 
+    print(numberOfDays)
+
+    ### --- I now get an error where I can't separate the timedate from the timedate array. 
+    ### --- unsupported operand type(s) for -: 'DatetimeArray' and 'datetime.date'
+
     # Change the date time format in these columns
     merged_df['Date Completed'] = pd.to_datetime(merged_df['Date Completed'])
     merged_df['Date Completed'] = merged_df['Date Completed'].dt.strftime('%d %b %Y')
@@ -67,23 +88,12 @@ if st.button('Start Merge', key='3'):
     merged_df['WEP Start Date'] = pd.to_datetime(merged_df['WEP Start Date'])
     merged_df['WEP Start Date'] = merged_df['WEP Start Date'].dt.strftime('%d %b %Y')
     
-    today = date.today()
-    print(today)
-    # merged_df['Months in DDP'] = (datetime.date.today().year - merged_df['DQC Completion Date']) 
-
-    # merged_df['Months in DDP'] = (today - merged_df['DDC Completion Date'].dt.date) // pd.Timedelta(days=30)
-    # merged_df['Months in DDP'] = (today - merged_df['DDC Completion Date']) // pd.Timedelta(days=30)
-   
     merged_df['DQC Completion Date'] = pd.to_datetime(merged_df['DQC Completion Date'])
     merged_df['DQC Completion Date'] = merged_df['DQC Completion Date'].dt.strftime('%d %b %Y')
    
     merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
     merged_df['DDC Completion Date'] = merged_df['DDC Completion Date'].dt.strftime('%d %b %Y')
-
-    # Filters out the dates. 
-    # filtered_df = merged_df[merged_df['DQC Completion Date'].isna()]
-    # merged_df['DQC Completion Date'] = filtered_df
-    
+   
     # Delete the columns that are not required.
     del merged_df['Job Location']
     del merged_df['Program Short Name']
