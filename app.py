@@ -5,6 +5,7 @@ import openpyxl
 import datetime
 from datetime import date
 
+
 import warnings
 warnings.simplefilter("ignore")
 
@@ -68,15 +69,19 @@ if st.button('Start Merge', key='3'):
     print(today)
     # Turns the datetime into a datetime array.
     merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
+    merged_df['Months in DDP'] = pd.to_datetime(merged_df['Months in DDP'])
+    today = pd.to_datetime(today)
 
     #Create the difference between the two dates. 
     date_delta = today - merged_df['DDC Completion Date']
 
     # Turns the dates into an interger. 
-    numberOfDays = date_delta.days
-
+    numberOfDays = date_delta
+   
     #Prints the number of days. 
-    print(numberOfDays)
+    DDP_Months = (numberOfDays/30.41)
+    print(DDP_Months)
+    # merged_df['Months in DDP'] = DDP_Months
 
     ### --- I now get an error where I can't separate the timedate from the timedate array. 
     ### --- unsupported operand type(s) for -: 'DatetimeArray' and 'datetime.date'
