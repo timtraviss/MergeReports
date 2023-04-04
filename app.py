@@ -5,8 +5,6 @@ import openpyxl
 import datetime
 from datetime import date
 import numpy as np
-from dateutil.relativedelta import relativedelta
-
 
 import warnings
 warnings.simplefilter("ignore")
