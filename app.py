@@ -40,6 +40,8 @@ if st.button('Start Merge', key='3'):
     st.success('Merge Started')
     
     # df1 equals the totara data. 
+    # Renames User's Fullname to Fullname
+    df1.rename(columns= {'User's Fullname':'Fullname'}, inplace=True)
     # Renames the Column User name to QID.
     df1.rename(columns= {'Username':'QID'}, inplace=True)
     # Turns the QID Column to uppercase.
