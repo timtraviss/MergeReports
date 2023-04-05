@@ -16,3 +16,4 @@ Version - 0.1
     * Have been able to calculate the dates, now need to turn the time delta into a float. Or turn it into months. 
 - Filter out DQC Completion Date, filter on blanks - ❌
 - Convert the CSV file into an excel file - ❌
+- Add error message if someone selects Start Merge with out adding a file - ❌
