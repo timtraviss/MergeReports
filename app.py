@@ -150,7 +150,7 @@ if st.button('Start Merge', key='3'):
     st.download_button(
         label="Download data as CSV",
         data=csv,
-        file_name='MergedReport.csv',
+        file_name='NewMergedReport.csv',
         mime='text/csv',
         )
     
