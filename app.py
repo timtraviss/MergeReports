@@ -142,7 +142,6 @@ if st.button('Start Merge', key='3'):
     st.write(merged_df.head(3))
 
     # Filters on the blank values in this dataframe
-    # merged_df = merged_df[merged_df['DQC Completion Date'].str.len() > 0]
     merged_df = merged_df[merged_df['DQC Completion Date'].isnull()]
     st.write('After Filter Applied')
     st.write(merged_df.head(3))
@@ -151,7 +150,7 @@ if st.button('Start Merge', key='3'):
     #Function to merge and encode data from dataframe to csv file. 
     def convert_df(merged_df):
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
-        return merged_df.to_csv().encode('utf-8')
+        return merged_df.to_csv(index=False).encode('utf-8')
 
     csv = convert_df(merged_df)
     st.success('Download Ready')
@@ -160,7 +159,7 @@ if st.button('Start Merge', key='3'):
         label="Download data as CSV",
         data=csv,
         file_name='NewMergedReport.csv',
-        mime='text/csv',
+        mime='text/csv'
         )
     
     st.write('TO DO')
