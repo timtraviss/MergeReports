@@ -92,6 +92,8 @@ if st.button('Start Merge', key='3'):
     
     merged_df['DQC Completion Date'] = pd.to_datetime(merged_df['DQC Completion Date'])
     merged_df['DQC Completion Date'] = merged_df['DQC Completion Date'].dt.strftime('%d %b %Y')
+    # Filters on the blank values in this dataframe
+    merged_df['DQC Completion Date'] = merged_df[merged_df['DQC Completion Date'].str.len() > 0]
    
     merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
     merged_df['DDC Completion Date'] = merged_df['DDC Completion Date'].dt.strftime('%d %b %Y')
