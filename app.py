@@ -162,8 +162,6 @@ if st.button('Start Merge', key='3'):
         mime='text/csv'
         )
     
-    st.write('TO DO')
-    st.markdown('- Save file as Excel')
-    st.markdown('- Add formula in the Months in DDP field **[=SUM(today()-K2/30.41)]**')
+    
 
     
