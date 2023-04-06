@@ -138,7 +138,14 @@ if st.button('Start Merge', key='3'):
     print('renamed')
     # This code will appear on the page. 
     st.subheader('Merged DF - Merged Report')
-    st.write(merged_df.head(5))
+    st.write('Before Filter Applied')
+    st.write(merged_df.head(3))
+
+    # Filters on the blank values in this dataframe
+    # merged_df = merged_df[merged_df['DQC Completion Date'].str.len() > 0]
+    merged_df = merged_df[merged_df['DQC Completion Date'].isnull()]
+    st.write('After Filter Applied')
+    st.write(merged_df.head(3))
 
     @st.cache_data
     #Function to merge and encode data from dataframe to csv file. 
