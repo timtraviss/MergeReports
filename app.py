@@ -56,7 +56,7 @@ if st.button('Start Merge', key='3'):
     df2.insert(loc=2, column='QID', value=None)
 
     # Extract the QID from the Trainee Column. 
-    df2['QID'] = df2['Trainee'].str.extract(r'\((.*?)\)')
+    # df2['QID'] = df2['Trainee'].str.extract(r'\((.*?)\)')
     del df2['District']
     del df2['Supervisors']
 
