@@ -4,6 +4,7 @@ import pandas as pd
 import datetime
 from datetime import date
 import numpy as np
+import xlsxwriter
 
 import warnings
 warnings.simplefilter("ignore")
@@ -108,6 +109,8 @@ if st.button('Start Merge', key='3'):
     del merged_df['Leave Return']
     del merged_df['INV Other']
     del merged_df['Wing number']
+    del merged_df['Trainee Name']
+    del merged_df['Supervisors']
     # del merged_df['Trainee']
     del merged_df['WEP Completed By']
     #This is wanted by Nicole - del merged_df['WEP Completed Date']
@@ -146,7 +149,7 @@ if st.button('Start Merge', key='3'):
     csv = convert_df(merged_df)
     st.success('Download Ready')
     
-    # Download Button. 
+    # Download Button csv
     st.download_button(
         label="Download data as CSV",
         data=csv,
