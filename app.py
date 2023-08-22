@@ -5,6 +5,8 @@ import datetime
 from datetime import date
 import numpy as np
 import xlsxwriter
+import openpyxl
+
 
 import warnings
 warnings.simplefilter("ignore")
@@ -45,7 +47,7 @@ if uploaded_file2 is not None:
     st.write(df2.head(3))
 
 if st.button('Start Merge', key='3'):
-    st.success('Merge Started')
+    st.success('Merge Completed')
     
     # Renames User's Fullname to Fullname
     df1.rename(columns= {'User\'s Fullname':'Fullname'}, inplace=True)
@@ -90,10 +92,10 @@ if st.button('Start Merge', key='3'):
     merged_df['WEP Start Date'] = pd.to_datetime(merged_df['WEP Start Date'])
     merged_df['WEP Start Date'] = merged_df['WEP Start Date'].dt.strftime('%d %b %Y')
     # Change the date time format in these columns
-    merged_df['DQC Completion Date'] = pd.to_datetime(merged_df['DQC Completion Date'])
-    merged_df['DQC Completion Date'] = merged_df['DQC Completion Date'].dt.strftime('%d %b %Y')
+    # merged_df['DQC Completion Date'] = pd.to_datetime(merged_df['DQC Completion Date'])
+    # merged_df['DQC Completion Date'] = merged_df['DQC Completion Date'].dt.strftime('%d %b %Y')
     # Filters on the blank values in this dataframe
-    # merged_df['DQC Completion Date'] = merged_df[merged_df['DQC Completion Date'].str.len() > 0]
+    #merged_df['DQC Completion Date'] = merged_df[merged_df['DQC Completion Date'].str.len() > 0]
     merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
     merged_df['DDC Completion Date'] = merged_df['DDC Completion Date'].dt.strftime('%d %b %Y')
     # Filters on the blank values in this dataframe
@@ -142,21 +144,41 @@ if st.button('Start Merge', key='3'):
   
     @st.cache_data
     #Function to merge and encode data from dataframe to csv file. 
-    def convert_df(merged_df):
+    def convert_df_csv(merged_df):
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
         return merged_df.to_csv(index=False).encode('utf-8')
-
-    csv = convert_df(merged_df)
-    st.success('Download Ready')
+    csv = convert_df_csv(merged_df)
     
+
     # Download Button csv
     st.download_button(
         label="Download data as CSV",
         data=csv,
-        file_name='NewMergedReport.csv',
+        file_name='NewMergedReportCSV.csv',
         mime='text/csv'
         )
+    # st.success('Downloaded CSV Ready')
+    xlsx = merged_df
+
+    #Function to merge and encode data from dataframe to xlsx file. 
+    def convert_df_xlsx(merged_df):
+       with pd.ExcelWriter('NewMergedReportExcel.xlsx', mode='a', engine='openpyxl') as writer:
+          convert_df_xlsx.to_excel(writer, index=False, sheet_name='Report').encode('utf-8')
+    
+    def convert_df_xlsx(merged_df):
+        with pd.ExcelWriter('NewMergedReportExcel.xlsx', engine='xlsxwriter') as writer:
+            merged_df.to_excel(writer, index=False, sheet_name='Report')
+    convert_df_xlsx(merged_df)
+
+
+    st.download_button(
+        label="Download data as XLSX",
+        data=open('NewMergedReportExcel.xlsx', 'rb'),  # Open the Excel file as binary
+        file_name='NewMergedReportExcel.xlsx')
     
     
+
+    
+
 
     
