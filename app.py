@@ -7,7 +7,6 @@ import numpy as np
 import xlsxwriter
 import openpyxl
 
-
 import warnings
 warnings.simplefilter("ignore")
 
@@ -167,9 +166,63 @@ if st.button('Start Merge', key='3'):
     
     def convert_df_xlsx(merged_df):
         with pd.ExcelWriter('NewMergedReportExcel.xlsx', engine='xlsxwriter') as writer:
-            merged_df.to_excel(writer, index=False, sheet_name='Report')
-    convert_df_xlsx(merged_df)
+            merged_df.to_excel(writer, index=False, sheet_name='Report', header=True)
+         # Get workbook
+            workbook = writer.book
 
+            # Get Sheet1
+            worksheet = writer.sheets['Report']
+
+            header_format = workbook.add_format({
+                'valign': 'vcenter',
+                'align': 'left',
+                'bold': True,
+                'font_color': 'black',
+                'bottom' : 2, 
+                'left': None,
+                'right': None,
+                'border_color': 'black',
+                'indent':1
+            })
+
+            cell_format = workbook.add_format({
+                'font_color':'black',
+                'valign': 'vcenter',
+                'align': 'left',
+                'indent':1
+            })
+            # sets row 1 height - computers numbering starts at 0, thus 0 is 1. 
+            worksheet.set_row(0,25, header_format)
+            # sets row 2 height
+            worksheet.set_row(1,20, cell_format)    
+            # sets column A width
+            worksheet.set_column(0, 0, 10, cell_format)
+            # sets all other columsn to 20. 
+            worksheet.set_column(1, 17, 20, cell_format)
+            # worksheet.write(0, value, header_format)
+            worksheet.autofilter(0,0,10,17)
+
+            # Filter so that Column L filters on blanks
+            worksheet.filter_column('L', 'x == Blanks')
+
+            # This codes sets the color of the conditional formatted cell
+            con_format = workbook.add_format({
+                'font_color':'red',
+                'valign': 'vcenter',
+                'align': 'left',
+                'indent':1
+            })
+
+            # Adds the conditional formatting to Column E, colors the cell red if > 30.
+            worksheet.conditional_format('E2:E1000', 
+                                         {'type':     'cell',
+                                        'criteria': '>',
+                                        'value':    30,
+                                        'format':   con_format})
+
+            # Close the sheet
+            writer.close()
+    convert_df_xlsx(merged_df)
 
     st.download_button(
         label="Download data as XLSX",
