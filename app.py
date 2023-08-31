@@ -199,11 +199,9 @@ if st.button('Start Merge', key='3'):
             worksheet.set_column(0, 0, 10, cell_format)
             # sets all other columsn to 20. 
             worksheet.set_column(1, 17, 20, cell_format)
-            # worksheet.write(0, value, header_format)
-            worksheet.autofilter(0,0,10,17)
 
-            # Filter so that Column L filters on blanks
-            worksheet.filter_column('L', 'x == Blanks')
+            # worksheet.write(0, value, header_format)
+            worksheet.autofilter('A1:R1000')
 
             # This codes sets the color of the conditional formatted cell
             con_format = workbook.add_format({
@@ -219,7 +217,10 @@ if st.button('Start Merge', key='3'):
                                         'criteria': '>',
                                         'value':    30,
                                         'format':   con_format})
-
+            
+            # Filter so that Column L filters on blanks
+            worksheet.filter_column(11,'x == Blanks')
+        
             # Close the sheet
             writer.close()
     convert_df_xlsx(merged_df)
