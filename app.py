@@ -97,6 +97,17 @@ if st.button('Start Merge', key='3'):
     #merged_df['DQC Completion Date'] = merged_df[merged_df['DQC Completion Date'].str.len() > 0]
     merged_df['DDC Completion Date'] = pd.to_datetime(merged_df['DDC Completion Date'])
     merged_df['DDC Completion Date'] = merged_df['DDC Completion Date'].dt.strftime('%d %b %Y')
+
+    ########### NEW CODE TO DROP THOSE WHO HAVE ATTENDED THE DQC
+
+    # Drop rows where 'DQC Completion Date' is not NaN
+    merged_df = merged_df[merged_df['DQC Completion Date'].isna()]
+
+    # Reset index after dropping rows
+    merged_df.reset_index(drop=True, inplace=True)
+
+    ###########
+
     # Filters on the blank values in this dataframe
     merged_df['WEP Completed Date'] = pd.to_datetime(merged_df['WEP Completed Date'])
     merged_df['WEP Completed Date'] = merged_df['WEP Completed Date'].dt.strftime('%d %b %Y')
@@ -219,7 +230,7 @@ if st.button('Start Merge', key='3'):
                                         'format':   con_format})
             
             # Filter so that Column L filters on blanks
-            worksheet.filter_column(11,'x == Blanks')
+            # worksheet.filter_column(11,'x == Blanks')
         
             # Close the sheet
             writer.close()
@@ -231,6 +242,7 @@ if st.button('Start Merge', key='3'):
         file_name='NewMergedReportExcel.xlsx')
     
     
+
 
     
 
