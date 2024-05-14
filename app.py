@@ -12,35 +12,22 @@ warnings.simplefilter("ignore")
 
 st.set_page_config(layout="wide", 
                    page_icon=":clipboard:", 
-                   page_title="Merge Reports"
+                   page_title="Modules Report"
                    )
 
 # This is the title to the code 
-st.title('Combine Files')
-st.write('This APP allows a user to Merge the Totara Module data with the WEP data, so that you have a combined view.')
-
-# Uploads the file containing the TOTARA Data 
-uploaded_file1 = st.file_uploader("Upload Totara Module data csv file", key="1")
-if uploaded_file1 is not None:
-  
-    df1 = pd.read_csv(uploaded_file1)
-    # Renames the Column User name to QID.
-    df1.rename(columns= {'Username':'QID'}, inplace=True)
-    # Turns the column into Uppercase
-    df1['QID'] = df1['QID'].str.upper()
-    # Writes out text on the webpage
-    st.subheader('DF1 - Module Data')
-    st.write(df1.head(3))
+st.title('Modules Report')
+st.write('This report details the number of modules that were sat in a given month. It also has a dashboard that gives you a count as to the number of modules sat and the average score for the modules sat. It does not record fails.')
 
 # Uploads the file containing the WEP data 
-uploaded_file2 = st.file_uploader("Upload WEP data xlsx file", key='2')
+uploaded_file2 = st.file_uploader("Upload Modules Report", key='2')
 if uploaded_file2 is not None:
  
     df2 = pd.read_excel(uploaded_file2)
     # Turns the QID Column to uppercase.
-    df2.rename(columns= {'Trainee QID':'QID'}, inplace=True) 
+    # df2.rename(columns= {'Trainee QID':'QID'}, inplace=True) 
     # Deletes the District Column from df2
-    del df2['District']
+    # del df2['District']
     # Writes out text on the webpage
     st.subheader('DF2 - WEP Data')
     st.write(df2.head(3))
