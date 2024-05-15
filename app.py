@@ -235,7 +235,7 @@ if st.button('Start Merge', key='3'):
             # Close the sheet
             writer.close()
     convert_df_xlsx(merged_df)
-
+    #Repair previous code
     st.download_button(
         label="Download data as XLSX",
         data=open('NewMergedReportExcel.xlsx', 'rb'),  # Open the Excel file as binary
