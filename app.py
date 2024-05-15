@@ -6,6 +6,7 @@ from datetime import date
 import numpy as np
 import xlsxwriter
 import openpyxl
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 import warnings
 warnings.simplefilter("ignore")
@@ -24,9 +25,9 @@ st.warning('It does not record fails.')
 # NEW CODE
 # This is the uploader for the excel file. 
 uploaded_file1 = st.file_uploader("Upload Modules Report", key='1')
-
 if uploaded_file1 is not None:
     df1 = pd.read_excel(uploaded_file1)
+    ## original_worksheet = input_workbook.active  # Get the active worksheet from the input file
     if st.button('Create Dashboard', key='2'):
         st.success('Dashboard Completed')
 
@@ -34,19 +35,27 @@ if uploaded_file1 is not None:
         # or create a new Excel file before attempting to open it
         workbook = openpyxl.Workbook()
 
+        # Create a new worksheet for the original data
+        original_data_sheet = workbook.active
+        original_data_sheet.title = 'Original Data'
+
+    # Write the dataframe to the 'Original Data' worksheet
+        for row in dataframe_to_rows(df1, index=False, header=True):
+            original_data_sheet.append(row)
+
         # Create a new worksheet named 'dashboard'
         dashboard_sheet = workbook.create_sheet('Dashboard')
 
         # Count the number of modules in column A of the first worksheet
-        module_count = df1['A'].count()
+        module_count = df1['User ID'].count()
 
         # Calculate the average score in column B of the first worksheet
-        average_score = df1['B'].mean()
+        average_score = df1['Grade'].mean()
 
         # Write the module count and average score to the 'Dashboard' worksheet
-        dashboard_sheet['A1'] = 'Module Count'
-        dashboard_sheet['B1'] = module_count
-        dashboard_sheet['A2'] = 'Average Score'
+        dashboard_sheet['A1'] = 'Modules sat in a month'
+        dashboard_sheet['A2'] = module_count
+        dashboard_sheet['B1'] = 'Average Score'
         dashboard_sheet['B2'] = average_score
 
         # Save the modified workbook
