@@ -1,59 +1,45 @@
+from PIL import Image
 import streamlit as st
-from io import BytesIO
-import pandas as pd
-import datetime
-from datetime import date
-import numpy as np
-import xlsxwriter
 
-import warnings
-warnings.simplefilter("ignore")
+st.set_page_config(layout="wide", page_icon=":clipboard:", page_title="Image Converter")
 
-import openpyxl
-from openpyxl.utils.dataframe import dataframe_to_rows
+st.title('Image Converter')
+import streamlit as st
+st.image('HeaderImage.png', caption='Image Conversion')
+st.write('The purpose of this page is to convert .webp files to .jpeg')
 
-# ... (the rest of your code remains the same) ...
+uploaded_file1 = st.file_uploader("Upload .webp file", key='1')
+if uploaded_file1 is not None:
+    input_file = uploaded_file1
+    # st.success('File Uploaded!')
 
-if st.button('Create Dashboard', key='2'):
-    st.success('Dashboard Completed')
-    workbook = openpyxl.Workbook()
+    # Define the output file path
+    output_file = "output_file.jpeg"
 
-    # Create a new worksheet for the original data
-    original_data_sheet = workbook.active
-    original_data_sheet.title = 'Original Data'
+    def convert_webp_to_jpeg(input_file, output_file):
+        try:
+            # Open the .webp image
+            webp_image = Image.open(input_file)
+            
+            # Convert the image to RGB mode and save as .jpeg
+            webp_image.convert('RGB').save(output_file, 'jpeg')
+            
+            st.success(f"File uploaded and conversion complete: {output_file}")
+        except Exception as e:
+            st.error(f"Error: {e}")
 
-    # Write the dataframe to the 'Original Data' worksheet
-    for row in dataframe_to_rows(df1, index=False, header=True):
-        original_data_sheet.append(row)
+    # Perform the conversion
+    convert_webp_to_jpeg(input_file, output_file)
 
-    # Create a new worksheet named 'Dashboard'
-    dashboard_sheet = workbook.create_sheet('Dashboard')
-
-    # Count the number of modules in column A of the 'Original Data' worksheet
-    module_count = df1['User ID'].count()
-
-    # Calculate the average score in column B of the 'Original Data' worksheet
-    average_score = df1['Grade'].mean()
-
-    # Write the module count and average score to the 'Dashboard' worksheet
-    dashboard_sheet['A1'] = 'Module Count'
-    dashboard_sheet['A2'] = module_count
-    dashboard_sheet['B1'] = 'Average Score'
-    dashboard_sheet['B2'] = average_score
-
-    # Save the modified workbook
-    workbook.save('Monthly_Modules_Report.xlsx')
-
-    st.download_button(
-        label="Download data as XLSX",
-        data=open('Monthly_Modules_Report.xlsx', 'rb'),
-        file_name='Monthly_Modules_Report.xlsx'
-    )
-    
-    
-
-
-    
-
-
-    
+    # Provide a download button for the converted image
+    with open(output_file, "rb") as file:
+        btn = st.download_button(
+                label="Download image",
+                data=file,
+                file_name="New_Image.jpeg",
+                mime="image/jpeg"
+            )
+        
+# Add a button to refresh the page
+if st.button('Refresh Page'):
+    st.experimental_rerun()

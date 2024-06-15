@@ -1,4 +1,4 @@
-# 📦 Merge Reports 
+# 📦 Image Converter
 ```
 ⬆️ (Replace above with your app's name)
 ```
