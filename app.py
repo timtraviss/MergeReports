@@ -16,7 +16,8 @@ st.set_page_config(layout="wide",
                    )
 
 # This is the title to the code 
-st.title('Combine Files')
+# st.title('Merge Reports')
+st.image('MergeReports_Image.png')
 st.write('This APP allows a user to Merge the Totara Module data with the WEP data, so that you have a combined view.')
 
 # Uploads the file containing the TOTARA Data 

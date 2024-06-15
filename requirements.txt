@@ -1,4 +1,4 @@
-streamlit==1.25.0 
+streamlit==1.35.0 
 pandas==2.0.3
 pyxlsb==1.0.10
 xlrd >= 1.0.0
